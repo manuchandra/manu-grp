@@ -1,36 +1,30 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the workflow will run
+name: "jfrog-oidc-test"
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+    branches:
+      - feature/jfrog-oidc
+permissions:
+  id-token: write    
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  npm-publish-setup:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+    steps:     
+    - name: "Setup JFrog cli / handshake via OIDC, with user"
+      uses: jfrog/setup-jfrog-cli@v4
+      env:
+        JF_URL: https://hts2.jfrog.io
+      with:
+        oidc-provider-name: github-group 
+        oidc-audience: manu-group
+    - name: Ping Artifactory
+      run: jf rt ping
+    - name: Get npm auth token
+      run: jf rt curl /api/npm/auth > auth
+    - name: Create .npmrc file
+      run: |
+        echo "loglevel=http" > .npmrc
+        echo "fund=false" >> .npmrc
+        echo "@mtg:registry=https://hts2.jfrog.io/artifactory/api/npm/manu-npm-virtual/" > .npmrc
+        cat auth | sed "s/^_auth\(.*\)$/\/\/hts2.jfrog.io\/:_auth\1/"  | sed 's/ //g' >> .npmrc    
+    - name: npm install
+      run: npm install @mtg/metrics-emitter --loglevel verbose
