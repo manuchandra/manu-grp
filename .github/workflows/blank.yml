@@ -26,7 +26,7 @@ jobs:
          run: jf rt ping       
            
        - name: Get npm auth token
-         run: jf rt curl https://hts2.jfrog.io/artifactory/api/npm/auth > auth
+         run: jf rt curl /artifactory/api/npm/auth > auth
            
        - name: Create .npmrc file
          run: |
