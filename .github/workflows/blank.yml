@@ -34,7 +34,7 @@ jobs:
          run: |
           echo "loglevel=http" > .npmrc
           echo "fund=false" >> .npmrc
-          echo "@mtg:registry=https://hts2.jfrog.io/artifactory/api/npm/manu-npm-virtual/" > .npmrc
+          echo "@mtg:registry=https://hts2.jfrog.io/artifactory/api/npm/manu-npm-virtual/" >> .npmrc
           cat auth | sed "s/^_auth\(.*\)$/\/\/hts2.jfrog.io\/:_auth\1/"  | sed 's/ //g' >> .npmrc    
        - name: npm install
          run: npm install @mtg/metrics-emitter --loglevel verbose
