@@ -41,4 +41,4 @@ jobs:
           echo "//hts2.jfrog.io/artifactory/api/npm/manu-npm-virtual/:always-auth=true" >> .npmrc
           cat auth | sed "s/^_auth\(.*\)$/\/\/hts2.jfrog.io\/:_auth\1/"  | sed 's/ //g' >> .npmrc    
        - name: npm install
-         run: npm install @mtg/metrics-emitter --loglevel verbose
+         run: npm install grunt --loglevel verbose
