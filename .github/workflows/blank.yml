@@ -10,8 +10,8 @@ jobs:
   build:
      runs-on: ubuntu-latest
      env:
-      OIDC_AUDIENCE: 'manu-group'
-      OIDC_PROVIDER: 'github-group'
+      OIDC_AUDIENCE: 'grpapi'
+      OIDC_PROVIDER: 'manu-grpapi'
       PLATFORM_REPO: 'manu-npm-virtual'
      steps:
        - name: Setup JFrog cli / handshake via OIDC, with user
