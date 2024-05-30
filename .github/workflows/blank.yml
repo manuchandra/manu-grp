@@ -21,6 +21,8 @@ jobs:
          with:
            oidc-provider-name: ${{ env.OIDC_PROVIDER }}
            oidc-audience: ${{ env.OIDC_AUDIENCE }}
+       - name: Print env
+         run: printenv
 
        - name: Ping Artifactory
          run: jf rt ping       
